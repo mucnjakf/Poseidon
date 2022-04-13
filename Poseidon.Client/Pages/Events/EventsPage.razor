@@ -1,0 +1,81 @@
+﻿@page "/events"
+@layout MainLayout
+@attribute [Authorize]
+
+<PageTitle>Poseidon - Events</PageTitle>
+
+<div class="card mx-auto w-75 mt-3 text-center">
+    <div class="card-header">
+        <h2 class="my-3">Events</h2>
+    </div>
+    <div class="card-body">
+        @if (Events is null)
+        {
+            <div class="mt-4">
+                <div class="spinner-border" role="status"></div>
+                <p>Loading...</p>
+            </div>
+        }
+        else if (Events.Any())
+        {
+            <RadzenDataGrid
+                AllowFiltering="true"
+                FilterMode="FilterMode.Simple"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                AllowSorting="true"
+                PageSize="13"
+                AllowPaging="true"
+                PagerHorizontalAlign="HorizontalAlign.Right"
+                ShowPagingSummary="true"
+                Data="@Events"
+                TItem="EventModel">
+                <Columns>
+                    <RadzenDataGridColumn TItem="EventModel" Property="Mmsi" Sortable="false" Title="MMSI" Width="70px">
+                        <Template Context="eventModel">
+                            <button type="button" class="btn btn-link p-0 text-decoration-none" @onclick="() => ShowVesselDetailsModalAsync(eventModel.Mmsi)">@eventModel.Mmsi</button>
+                        </Template>
+                    </RadzenDataGridColumn>
+
+                    <RadzenDataGridColumn TItem="EventModel" Property="Latitude" Sortable="false" Title="Latitude" Width="60px"/>
+                    <RadzenDataGridColumn TItem="EventModel" Property="Longitude" Sortable="false" Title="Longitude" Width="60px"/>
+                    <RadzenDataGridColumn TItem="EventModel" Property="MedianSpeedKnots" Sortable="false" Title="Median speed in knots" Width="60px"/>
+                    <RadzenDataGridColumn TItem="EventModel" Property="TotalDurationHours" Sortable="false" Title="Total duration in hours" Width="60px">
+                        <Template Context="eventModel">
+                            @TimeSpan.FromHours(eventModel.TotalDurationHours).Hours hrs @TimeSpan.FromHours(eventModel.TotalDurationHours).Minutes min @TimeSpan.FromHours(eventModel.TotalDurationHours).Seconds sec
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="EventModel" Property="IsIllegal" Sortable="false" Title="Illegal" Width="30px">
+                        <Template Context="eventModel">
+                            @if (eventModel.IsIllegal)
+                            {
+                                <RadzenIcon Icon="warning" class="text-danger"/>
+                            }
+                            else
+                            {
+                                <RadzenIcon Icon="check_circle" class="text-success"/>
+                            }
+                        </Template>
+                    </RadzenDataGridColumn>
+                    <RadzenDataGridColumn TItem="EventModel" Sortable="false" Width="45px">
+                        <Template Context="eventModel">
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-primary d-flex justify-content-center" style="width: 3rem;" @onclick="() => ShowEventDetailsModal(eventModel)">
+                                    <RadzenIcon Icon="launch"/>
+                                </button>
+                                <button class="btn btn-success d-flex justify-content-center" style="width: 3rem;" @onclick="() => ShowEventOnMap(eventModel)">
+                                    <RadzenIcon Icon="gps_fixed"/>
+                                </button>
+                            </div>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        }
+        else
+        {
+            <div class="alert alert-danger w-50 mx-auto mt-3">
+                No events found in database.
+            </div>
+        }
+    </div>
+</div>

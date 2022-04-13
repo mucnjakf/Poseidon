@@ -1,0 +1,126 @@
+﻿@page "/account"
+@layout MainLayout
+@attribute [Authorize]
+
+<PageTitle>Poseidon - Account</PageTitle>
+
+<div class="card w-75 mx-auto my-3 text-center">
+    <div class="card-header">
+        <h2 class="my-3">Account</h2>
+    </div>
+
+    <div class="card-body my-3 w-50 mx-auto">
+        @if (ApplicationUserModel is null)
+        {
+            <div class="mt-3">
+                <div class="spinner-border" role="status"></div>
+                <p>Loading...</p>
+            </div>
+        }
+        else
+        {
+            <div class="input-group mb-3">
+                <label class="input-group-text fw-bold">ID</label>
+                <label class="form-control text-start">
+                    @ApplicationUserModel.Id
+                </label>
+            </div>
+
+            <div class="input-group">
+                <label class="input-group-text fw-bold">E-Mail</label>
+                <label class="form-control text-start">
+                    @ApplicationUserModel.Email
+                </label>
+                <button class="btn btn-primary d-flex align-items-center" @onclick="ShowUpdateUserEmailModalAsync">
+                    <RadzenIcon Icon="edit"/>
+                </button>
+            </div>
+
+            <div class="input-group mt-3">
+                <label class="input-group-text fw-bold">Username</label>
+                <label class="form-control text-start">
+                    @ApplicationUserModel.Username
+                </label>
+                <button class="btn btn-primary d-flex align-items-center" @onclick="ShowUpdateUserUsernameModalAsync">
+                    <RadzenIcon Icon="edit"/>
+                </button>
+            </div>
+        }
+    </div>
+
+    <div class="card-footer">
+        <div class="container my-1">
+            <div class="row">
+                <div class="col justify-content-center d-flex">
+                    <button class="btn btn-primary w-50 d-flex justify-content-center" @onclick="ShowUpdateUserPasswordModalAsync" disabled="@(ApplicationUserModel is null)">
+                        <RadzenIcon Icon="edit" class="mx-2"/>
+                        Change password
+                    </button>
+                </div>
+
+                <div class="col justify-content-center d-flex">
+                    <button class="btn btn-danger w-50 d-flex justify-content-center" @onclick="ShowDeleteUserModalAsync" disabled="@(ApplicationUserModel is null)">
+                        <RadzenIcon Icon="delete" class="mx-2"/>
+                        Delete account
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mx-auto w-75 text-center">
+    <div class="card-header">
+        <h2 class="my-3">Users</h2>
+    </div>
+
+    <div class="card-body">
+        @if (ApplicationUsers is null)
+        {
+            <div class="mt-4">
+                <div class="spinner-border" role="status"></div>
+                <p>Loading...</p>
+            </div>
+        }
+        else if (ApplicationUsers.Any())
+        {
+            <RadzenDataGrid
+                AllowFiltering="true"
+                FilterMode="FilterMode.Simple"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                AllowSorting="true"
+                PageSize="5"
+                AllowPaging="true"
+                PagerHorizontalAlign="HorizontalAlign.Right"
+                ShowPagingSummary="true"
+                Data="@ApplicationUsers"
+                TItem="ApplicationUserModel">
+                <Columns>
+                    <RadzenDataGridColumn TItem="ApplicationUserModel" Property="Id" Title="ID" Width="120px"/>
+                    <RadzenDataGridColumn TItem="ApplicationUserModel" Property="Username" Title="Username" Width="100px"/>
+                    <RadzenDataGridColumn TItem="ApplicationUserModel" Property="Email" Title="E-Mail" Width="90px"/>
+                    <RadzenDataGridColumn TItem="ApplicationUserModel" Sortable="false" Width="25px">
+                        <Template Context="applicationUser">
+                            <button class="btn btn-danger d-flex justify-content-center" style="width: 100%;" @onclick="() => ShowDeleteUserModalAsync(applicationUser.Username)">
+                                <RadzenIcon Icon="delete"/>
+                            </button>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        }
+        else
+        {
+            <div class="alert alert-danger w-50 mx-auto mt-3">
+                No users found in database.
+            </div>
+        }
+    </div>
+
+    <div class="card-footer d-flex justify-content-center">
+        <button class="btn btn-primary w-25 my-1 d-flex justify-content-center" @onclick="ShowInsertUserModalAsync">
+            <RadzenIcon Icon="person_add" class="mx-2"/>
+            Add new user
+        </button>
+    </div>
+</div>

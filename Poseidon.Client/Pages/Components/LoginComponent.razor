@@ -1,0 +1,58 @@
+﻿@layout LoginLayout
+
+<div class="container d-flex mx-auto justify-content-center mt-5">
+    <div class="card mt-5 shadow p-3 mb-5 rounded" style="width: 30rem;">
+        <div class="card-header text-center">
+            <div class="my-3">
+                <img src="../images/poseidon.png" alt="Poseidon logo"/>
+                <h1 class="display-6">Poseidon Login</h1>
+            </div>
+        </div>
+
+        <EditForm Model="LoginRequestDto" OnValidSubmit="HandleLoginAsync">
+            <div class="card-body">
+                <div class="mb-3">
+                    <p class="lead">
+                        <small>Please insert your account username and password.</small>
+                    </p>
+
+                    @if (ShowErrors)
+                    {
+                        <ul class="list-group my-4">
+                            @foreach (string error in Errors)
+                            {
+                                <li class="list-group-item list-group-item-danger">@error</li>
+                            }
+                        </ul>
+                    }
+
+                    <div class="form-floating mb-3">
+                        <InputText class="form-control" placeholder="Username" @bind-Value="LoginRequestDto.Username"/>
+                        <label>Username</label>
+                    </div>
+                    <div class="form-floating">
+                        <InputText type="password" class="form-control" placeholder="Password" @bind-Value="LoginRequestDto.Password"/>
+                        <label>Password</label>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="card-footer text-center">
+                <div class="my-3 d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary w-50 d-flex align-items-center justify-content-center">
+                        @if (ShowSpinner)
+                        {
+                            <div class="spinner-border" role="status" style="width: 15px; height: 15px;"></div>
+                        }
+                        else
+                        {
+                            <RadzenIcon Icon="login"/>
+                        }
+                        <span class="mx-2">Login</span>
+                    </button>
+                </div>
+            </div>
+        </EditForm>
+    </div>
+</div>

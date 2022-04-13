@@ -1,0 +1,53 @@
+﻿<EditForm Model="InsertUserRequestDto" OnValidSubmit="HandleInsertUserAsync" style="width: 35rem;">
+    <hr style="background-color: black;" class="mt-0"/>
+
+    <div>
+        <p class="lead">
+            <small>Please enter user account details.</small>
+        </p>
+
+        @if (ShowErrors)
+        {
+            <ul class="list-group my-4">
+                @foreach (string error in Errors)
+                {
+                    <li class="list-group-item list-group-item-danger">@error</li>
+                }
+            </ul>
+        }
+
+        <div class="form-floating mb-3">
+            <InputText class="form-control" placeholder="E-Mail" @bind-Value="InsertUserRequestDto.Email"/>
+            <label>E-Mail</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <InputText class="form-control" placeholder="Username" @bind-Value="InsertUserRequestDto.Username"/>
+            <label>Username</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <InputText type="password" class="form-control" placeholder="New Password" @bind-Value="InsertUserRequestDto.Password"/>
+            <label>Password</label>
+        </div>
+
+        <div class="form-floating mb-3">
+            <InputText type="password" class="form-control" placeholder="Confirm Password" @bind-Value="InsertUserRequestDto.ConfirmPassword"/>
+            <label>Confirm Password</label>
+        </div>
+    </div>
+
+    <hr style="background-color: black;"/>
+
+    <div class="mx-auto text-center">
+        <button type="submit" class="btn btn-primary w-50 my-2">
+            <i class="bi bi-check-circle"></i>
+            Confirm
+        </button>
+
+        <button type="button" class="btn btn-danger w-50" @onclick="ModalInstance.CancelAsync">
+            <i class="bi bi-x-circle"></i>
+            Cancel
+        </button>
+    </div>
+</EditForm>
