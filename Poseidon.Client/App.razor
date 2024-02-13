@@ -1,0 +1,27 @@
+﻿<CascadingAuthenticationState>
+    <BlazoredToasts Position="ToastPosition.BottomRight" Timeout="3" ShowProgressBar="true"/>
+    <CascadingBlazoredModal>
+        <Router AppAssembly="@typeof(App).Assembly">
+            <Found Context="routeData">
+                <AuthorizeRouteView RouteData="@routeData">
+                    <NotAuthorized>
+                        @if (context.User.Identity!.IsAuthenticated)
+                        {
+                            <UnauthorizedComponent/>
+                        }
+                        else
+                        {
+                            <LoginComponent/>
+                        }
+                    </NotAuthorized>
+                </AuthorizeRouteView>
+            </Found>
+            <NotFound>
+                <PageTitle>Poseidon - Not found</PageTitle>
+                <LayoutView Layout="@typeof(MainLayout)">
+                    <NotFoundComponent />
+                </LayoutView>
+            </NotFound>
+        </Router>
+    </CascadingBlazoredModal>
+</CascadingAuthenticationState>

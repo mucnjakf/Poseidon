@@ -1,0 +1,81 @@
+﻿@page "/map"
+@layout MainLayout
+@attribute [Authorize]
+
+<PageTitle>Poseidon - Map</PageTitle>
+
+<div id="map" class="w-100 h-100" style="z-index: 0;"></div>
+
+<div class="position-absolute top-0 end-0 mt-3 mx-3 d-flex align-items-center bg-dark rounded">
+    @if (IsSystemOnline)
+    {
+        <RadzenIcon Icon="circle" class="text-success mx-3"/>
+
+        <button class="btn btn-outline-danger w-100" @onclick="StopSystemAsync">
+            Stop receiving events
+        </button>
+    }
+    else
+    {
+        <RadzenIcon Icon="circle" class="text-danger mx-3"/>
+
+        <button class="btn btn-outline-success w-100" @onclick="StartSystemAsync">
+            Start receiving events
+        </button>
+    }
+    <button class="btn btn-outline-primary mx-1 d-flex align-items-center" data-bs-toggle="collapse" data-bs-target="#collapseEvents">
+        <RadzenIcon Icon="menu"/>
+    </button>
+</div>
+
+<div class="position-absolute top-0 end-0 mt-5 mx-3 collapse" id="collapseEvents" style="width: 18rem;">
+    <div class="card mt-3">
+        <div class="card-body text-center">
+            <h5 class="fw-bold">Undismissed events</h5>
+
+            <ul class="list-group" style="max-height: 300px; overflow: scroll">
+                @if (EventsWaitingToBeDismissedModal.Any())
+                {
+                    @foreach (EventModel eventModel in EventsWaitingToBeDismissedModal)
+                    {
+                        <li class="list-group-item list-group-item-action d-flex justify-content-between align-items-center">
+                            <button type="button" class="btn btn-link p-0 text-decoration-none" @onclick="() => ShowVesselDetailsModalAsync(eventModel.Mmsi)">@eventModel.Mmsi</button>
+                            
+                            @if (eventModel.IsIllegal)
+                            {
+                                <button class="btn btn-danger" @onclick="() => FlyToEvent(eventModel.Latitude, eventModel.Longitude)">
+                                    <i class="bi bi-geo"></i>
+                                </button>
+                            }
+                            else
+                            {
+                                <button class="btn btn-success" @onclick="() => FlyToEvent(eventModel.Latitude, eventModel.Longitude)">
+                                    <i class="bi bi-geo"></i>
+                                </button>
+                            }
+                        </li>
+                    }
+                }
+                else
+                {
+                    <li class="list-group-item list-group-item-danger">No events found.</li>
+                }
+            </ul>
+
+            <hr style="background-color: black; margin-top: 0;"/>
+
+            <p class="mt-0 mb-3">Undismissed events: <b>@EventsWaitingToBeDismissedModal.Count</b></p>
+
+            <hr style="background-color: black; margin-top: 0;"/>
+
+            <div class="justify-content-center">
+                <p>Events loaded</p>
+                <RadzenNumeric TValue="int" Min="1" @bind-Value="@NumberOfEventsLoaded" class="w-50" Change="@(value => OnEventsLoadedChangeAsync(value))"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="position-absolute top-0 mx-5 mt-3 bg-dark rounded p-2 d-flex align-items-center">
+    <h5 class="text-white my-1">@_gisService.LatLon.ToUpper()</h5>
+</div>

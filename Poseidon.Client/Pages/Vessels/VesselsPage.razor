@@ -1,0 +1,69 @@
+﻿@page "/vessels"
+@layout MainLayout
+@attribute [Authorize]
+
+<PageTitle>Poseidon - Vessels</PageTitle>
+
+<div class="card mx-auto w-75 mt-3 text-center">
+    <div class="card-header">
+        <h2 class="my-3">Vessels</h2>
+    </div>
+    <div class="card-body">
+        @if (Vessels is null)
+        {
+            <div class="mt-4">
+                <div class="spinner-border" role="status"></div>
+                <p>Loading...</p>
+            </div>
+        }
+        else if (Vessels.Any())
+        {
+            <RadzenDataGrid
+                AllowFiltering="true"
+                FilterMode="FilterMode.Simple"
+                FilterCaseSensitivity="FilterCaseSensitivity.CaseInsensitive"
+                AllowSorting="true"
+                PageSize="12"
+                AllowPaging="true"
+                PagerHorizontalAlign="HorizontalAlign.Right"
+                ShowPagingSummary="true"
+                Data="@Vessels"
+                TItem="VesselModel">
+                <Columns>
+                    <RadzenDataGridColumn TItem="VesselModel" Property="Mmsi" Sortable="false" Title="MMSI" Width="80px"/>
+                    <RadzenDataGridColumn TItem="VesselModel" Property="Name" Sortable="false" Title="Name" Width="80px"/>
+                    <RadzenDataGridColumn TItem="VesselModel" Property="Callsign" Sortable="false" Title="Callsign" Width="30px"/>
+                    <RadzenDataGridColumn TItem="VesselModel" Property="Flag" Sortable="false" Title="Flag" Width="30px"/>
+                    <RadzenDataGridColumn TItem="VesselModel" Property="Imo" Sortable="false" Title="IMO" Width="70px"/>
+                    <RadzenDataGridColumn TItem="VesselModel" Sortable="false" Width="40px">
+                        <Template Context="vessel">
+                            <div class="d-flex justify-content-between">
+                                <button class="btn btn-primary d-flex justify-content-center" style="width: 2.2rem;" @onclick="() => ShowVesselDetailsModal(vessel)">
+                                    <RadzenIcon Icon="launch"/>
+                                </button>
+                                <button class="btn btn-warning d-flex justify-content-center text-white" style="width: 2.2rem;" @onclick="() => ShowUpdateVesselModalAsync(vessel)">
+                                    <RadzenIcon Icon="edit"/>
+                                </button>
+                                <button class="btn btn-danger d-flex justify-content-center" style="width: 2.2rem;" @onclick="() => ShowDeleteVesselModalAsync(vessel)">
+                                    <RadzenIcon Icon="delete"/>
+                                </button>
+                            </div>
+                        </Template>
+                    </RadzenDataGridColumn>
+                </Columns>
+            </RadzenDataGrid>
+        }
+        else
+        {
+            <div class="alert alert-danger w-50 mx-auto mt-3">
+                No vessels found in database.
+            </div>
+        }
+    </div>
+    <div class="card-footer d-flex justify-content-center">
+        <button class="btn btn-primary w-25 my-1 d-flex justify-content-center" @onclick="ShowInsertVesselModalAsync">
+            <RadzenIcon Icon="directions_boat" class="mx-2"/>
+            Add new vessel
+        </button>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+﻿@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300&family=Roboto:wght@300&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+}
+
+@keyframes fade {
+    from {
+        opacity: 0.2;
+    }
+}
+
+.blinking {
+    animation: fade 0.5s infinite alternate;
+}
