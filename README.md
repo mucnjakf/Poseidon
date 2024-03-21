@@ -1,4 +1,4 @@
-# <img src="poseidon.png" width="25"/> Poseidon
+# <img src="poseidon.svg" width="25"/> Poseidon
 
 ### **👁️ Overview**
 Sea Monitoring System Web Application - 2022.
