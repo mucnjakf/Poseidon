@@ -4,7 +4,7 @@
 Sea Monitoring System Web Application - 2022.
 
 <p align="justify">
-  Poseidon is a system utilizing machine learning models for monitoring and detecting illegal activities at sea. By leveraging advanced algorithms, Poseidon provides real-time analysis of maritime data to identify suspicious behavior, helping to combat illegal fishing, smuggling, and other illicit activities on the open waters. With Poseidon, authorities and organizations can enhance maritime security and protect marine ecosystems more effectively than ever before.
+  Poseidon is a system utilizing machine learning models for monitoring and detecting illegal activities at sea. By leveraging advanced algorithms, Poseidon provides real-time analysis of maritime data to identify suspicious behavior and enhance maritime security.
 </p>
 
 #
@@ -26,11 +26,3 @@ Sea Monitoring System Web Application - 2022.
   - Hangfire
 - Database
   - Microsoft SQL Server
-
-#
-
-### **🛠️ Tools**
-- Source Control: GitHub
-- IDE: Rider | Visual Studio 2022
-- API Client: Postman
-- RDBMS: Azure Data Studio
